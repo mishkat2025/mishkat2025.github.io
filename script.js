@@ -25,9 +25,6 @@
     try { localStorage.setItem(STORAGE_KEY, value); } catch (e) { /* not fatal */ }
   }
 
-  function systemPrefersDark() {
-    return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
-  }
 
   var toggle = document.getElementById("themeToggle");
 
@@ -35,8 +32,8 @@
     toggle.addEventListener("click", function () {
       var current = document.documentElement.getAttribute("data-theme");
 
-      // No explicit choice yet? Start from whatever the system is doing.
-      if (!current) current = systemPrefersDark() ? "dark" : "light";
+      // No explicit choice yet means we are on the default dark theme.
+      if (!current) current = "dark";
 
       var next = current === "dark" ? "light" : "dark";
       document.documentElement.setAttribute("data-theme", next);
@@ -139,14 +136,21 @@
   var copyBtn = document.getElementById("copyEmail");
 
   if (copyBtn && navigator.clipboard) {
+    // Change only the text span, so the icon next to it survives.
+    var copyLabel = copyBtn.querySelector(".copy-label") || copyBtn;
+    var originalLabel = copyLabel.textContent;
+
     copyBtn.addEventListener("click", function () {
       var address = copyBtn.getAttribute("data-email");
       navigator.clipboard.writeText(address).then(function () {
-        var original = copyBtn.textContent;
-        copyBtn.textContent = "Copied";
-        setTimeout(function () { copyBtn.textContent = original; }, 1600);
+        copyLabel.textContent = "Copied to clipboard";
+        copyBtn.classList.add("is-done");
+        setTimeout(function () {
+          copyLabel.textContent = originalLabel;
+          copyBtn.classList.remove("is-done");
+        }, 2400);
       }).catch(function () {
-        copyBtn.textContent = "Press Ctrl+C";
+        copyLabel.textContent = "Press Ctrl+C";
       });
     });
   } else if (copyBtn) {

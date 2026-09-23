@@ -20,10 +20,12 @@
   <!-- EDIT ME: replace with your real URL once it is live -->
   <meta property="og:url" content="https://mishkat2025.github.io/">
 
+  <meta name="theme-color" content="#0c0d0e">
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&amp;family=Inter:wght@400;500;600&amp;display=swap"
+    href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;family=Space+Grotesk:wght@500;600;700&amp;display=swap"
     rel="stylesheet">
 
   <link rel="stylesheet" href="styles.css">
@@ -32,8 +34,8 @@
      1. Mark that JS is alive, so the fade-in animations are allowed to
         start hidden. Without this, a visitor with JS off would see a
         blank page.
-     2. Apply the saved colour theme immediately, so there is no white
-        flash before dark mode kicks in. -->
+     2. Apply the saved colour theme immediately, so there is no flash
+        of the wrong theme. The site is dark unless someone picks light. -->
   <script>
     (function () {
       document.documentElement.classList.add("js");
@@ -42,7 +44,7 @@
         if (saved === "dark" || saved === "light") {
           document.documentElement.setAttribute("data-theme", saved);
         }
-      } catch (e) { /* private mode: fall back to the system preference */ }
+      } catch (e) { /* private mode: stay on the default dark theme */ }
     })();
   </script>
 </head>
@@ -53,8 +55,17 @@
 
   <header class="site-header" id="siteHeader">
     <div class="wrap header-inner">
-      <!-- EDIT ME: your name -->
-      <a class="brand" href="#top">Abu&nbsp;Zafar&nbsp;Mohammad&nbsp;Saleh&nbsp;Billah&nbsp;Mishkat</a>
+      <div class="brand-group">
+        <!-- EDIT ME: your name -->
+        <a class="brand" href="#top">
+          <span class="dot" aria-hidden="true"></span>
+          <span class="brand-name">Abu Zafar Mohammad Saleh Billah Mishkat</span>
+        </a>
+        <span class="status-chip">
+          <span class="dot dot-pulse" aria-hidden="true"></span>
+          Available for opportunities
+        </span>
+      </div>
 
       <nav class="nav" id="nav" aria-label="Main">
         <a href="#about">About</a>
@@ -75,6 +86,7 @@
             <path d="M20 14.2A8.2 8.2 0 0 1 9.8 4a8.4 8.4 0 1 0 10.2 10.2z" />
           </svg>
         </button>
+        <a class="btn-mini" href="resume.pdf">Résumé</a>
         <button class="icon-btn menu-btn" id="menuBtn" type="button" aria-label="Open menu" aria-expanded="false"
           aria-controls="nav">
           <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -88,336 +100,435 @@
   <main id="main">
 
     <!-- ===================== HERO ===================== -->
-    <section class="hero wrap" id="top">
-      <p class="eyebrow reveal">
-        <span class="dot" aria-hidden="true"></span>
-        <!-- EDIT ME: or delete this whole line if you are not looking -->
-        Freelance web and software developer || open to opportunities
-      </p>
+    <section class="hero" id="top">
+      <div class="hero-glow" aria-hidden="true"></div>
 
-      <!-- EDIT ME: the one-line version of you. Plain beats clever. -->
-      <h1 class="reveal">I build your ideas into reality, which reflects your vision.</h1>
+      <div class="wrap hero-grid">
+        <div class="hero-copy">
+          <p class="eyebrow reveal">
+            <span class="dot dot-pulse" aria-hidden="true"></span>
+            <!-- EDIT ME: or delete this whole line if you are not looking -->
+            Freelance web and software developer || open to opportunities
+          </p>
 
-      <p class="lede reveal">
-        <!-- EDIT ME: 2-3 sentences. What you do, what you are studying or working
-           on, and what you want next. Recruiters read roughly this much. -->
-        I am a final-year Computer Science student in the East West University, working across full-stack
-        development and applied machine learning. Recently I have builded a fully operational student mangment system
-        for a respected teacher from english medium. I have also been building
-        retrieval systems and small tools that make messy data usable. I am
-        looking for a role where I can ship real things and learn from people
-        who are better than me.
-      </p>
+          <!-- EDIT ME: the one-line version of you. Plain beats clever. -->
+          <h1 class="reveal">I build your ideas into reality, which reflects your vision.</h1>
 
-      <div class="cta-row reveal">
-        <a class="btn btn-primary" href="#projects">See my work</a>
-        <!-- EDIT ME: drop your CV in as resume.pdf next to index.html -->
-        <a class="btn" href="resume.pdf">Résumé</a>
+          <p class="lede reveal">
+            <!-- EDIT ME: 2-3 sentences. What you do, what you are studying or working
+               on, and what you want next. Recruiters read roughly this much. -->
+            I am a final-year Computer Science student in the East West University, working across full-stack
+            development and applied machine learning. Recently I have builded a fully operational student mangment
+            system for a respected teacher from english medium. I have also been building
+            retrieval systems and small tools that make messy data usable. I am
+            looking for a role where I can ship real things and learn from people
+            who are better than me.
+          </p>
+
+          <div class="hero-actions reveal">
+            <div class="cta-row">
+              <a class="btn btn-primary" href="#projects">See my work</a>
+              <!-- EDIT ME: drop your CV in as resume.pdf next to index.html -->
+              <a class="btn" href="resume.pdf">Résumé</a>
+            </div>
+
+            <ul class="inline-links hero-links" aria-label="Elsewhere">
+              <!-- EDIT ME: all three links -->
+              <li><a href="https://github.com/mishkat2025" target="_blank" rel="noopener">GitHub</a></li>
+              <li><a href="https://www.linkedin.com/in/saleh-billah/" target="_blank" rel="noopener">LinkedIn</a></li>
+              <li><a href="mailto:sbmishkat10@gmail.com">Email</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Terminal card. Purely a summary of facts that appear elsewhere
+             on the page, so keep it in sync if those change. -->
+        <div class="terminal reveal">
+          <div class="term-bar">
+            <div class="term-title">
+              <span class="light light-r" aria-hidden="true"></span>
+              <span class="light light-y" aria-hidden="true"></span>
+              <span class="light light-g" aria-hidden="true"></span>
+              <span class="term-file">billah-workbench ~ bash</span>
+            </div>
+            <span class="term-live"><span class="dot dot-ping" aria-hidden="true"></span>live</span>
+          </div>
+
+          <div class="term-body">
+            <div class="t-comment">// active developer stack initialized</div>
+            <div class="t-line">
+              <span class="t-prompt">$</span>
+              <span class="t-cmd">fetch-profile --target="Abu Zafar M. S. B. Mishkat"</span>
+            </div>
+
+            <!-- EDIT ME: keep these lines true -->
+            <div class="t-output">
+              <div class="t-ok">&#10003; Current Status: Final-year CSE @ EWU</div>
+              <div>&#10003; Production: Student Management System (React, Node, PM2, Nginx)</div>
+              <div>&#10003; Research: BM25 + Vector Semantic RAG Pipeline</div>
+              <div class="t-ok-soft">&#10003; Focus: Full-Stack Engineering &amp; Applied AI/ML</div>
+            </div>
+
+            <div class="t-line">
+              <span class="t-prompt">$</span>
+              <span class="t-cmd-dim">ready-to-ship --mode=production</span>
+              <span class="t-cursor" aria-hidden="true"></span>
+            </div>
+          </div>
+        </div>
       </div>
-
-      <ul class="hero-links reveal" aria-label="Elsewhere">
-        <!-- EDIT ME: all three links -->
-        <li><a href="https://github.com/mishkat2025">GitHub</a></li>
-        <li><a href="https://www.linkedin.com/in/saleh-billah/">LinkedIn</a></li>
-        <li><a href="mailto:sbmishkat10@gmail.com">Email</a></li>
-      </ul>
     </section>
 
     <!-- ===================== ABOUT ===================== -->
-    <section class="section wrap" id="about">
-      <div class="section-head reveal">
-        <span class="num">01</span>
-        <h2>About</h2>
-      </div>
+    <section class="section" id="about">
+      <div class="wrap">
+        <div class="about-grid">
+          <div>
+            <div class="section-head reveal">
+              <span class="num">[ 01 ]</span>
+              <h2>About</h2>
+            </div>
 
-      <div class="about-grid">
-        <div class="prose reveal">
-          <!-- EDIT ME: the human paragraphs. How you got here, what you like,
-             what you are actually good at. Write like you talk. -->
-          <p>
-            I've been interested in web and software development since long before I formally studied computer science.
-            I enjoy building things that are not only functional, but also thoughtfully designed, and I'm always curious
-            about how things work beneath the surface.
-          </p>
-          <p>
-            I've built across the development stack from React to backend development, MERN, SQL and NoSQL databases,
-            and deploying applications manually with PM2 and Nginx. I've deliberately learned the technologies behind
-            what I build so I can understand, troubleshoot, and take control of the systems I work with.
+            <div class="prose reveal">
+              <!-- EDIT ME: the human paragraphs. How you got here, what you like,
+                 what you are actually good at. Write like you talk. -->
+              <p>
+                I've been interested in web and software development since long before I formally studied computer
+                science. I enjoy building things that are not only functional, but also thoughtfully designed, and I'm
+                always curious about how things work beneath the surface.
+              </p>
+              <p>
+                I've built across the development stack from React to backend development, MERN, SQL and NoSQL
+                databases, and deploying applications manually with PM2 and Nginx. I've deliberately learned the
+                technologies behind what I build so I can understand, troubleshoot, and take control of the systems I
+                work with.
+              </p>
+              <p>
+                With AI becoming an increasingly important part of development, I see it as a tool rather than a
+                substitute for understanding. I use AI to automate, explore, and move faster, while relying on my own
+                technical knowledge to evaluate its output, catch mistakes, and make the final decisions.
+              </p>
+            </div>
+          </div>
 
-          </p>
-          <p>
-            With AI becoming an increasingly important part of development, I see it as a tool rather than a substitute
-            for understanding. I use AI to automate, explore, and move faster, while relying on my own technical
-            knowledge to evaluate its output, catch mistakes, and make the final decisions.
-          </p>
+          <aside class="dossier reveal" aria-label="Quick facts">
+            <div class="dossier-head">
+              <span>Quick Index · Dossier</span>
+              <span class="dot" aria-hidden="true"></span>
+            </div>
+
+            <dl>
+              <div class="fact">
+                <dt>Education</dt>
+                <dd class="fact-v">BSc in Computer Science &amp; Engineering</dd>
+                <dd class="fact-sub">East West University · Final Year</dd>
+              </div>
+              <div class="fact">
+                <dt>Based in</dt>
+                <dd class="fact-v">Dhaka, Bangladesh</dd>
+              </div>
+              <div class="fact">
+                <dt>Focus</dt>
+                <dd class="fact-v">Full-Stack Development · AI/ML</dd>
+              </div>
+              <div class="fact">
+                <dt>Learning</dt>
+                <dd class="fact-v fact-accent">Advanced AI · RAG · LLMs</dd>
+              </div>
+            </dl>
+          </aside>
         </div>
-
-        <aside class="facts reveal">
-
-          <div class="fact">
-            <span class="fact-k">Education</span>
-            <span class="fact-v">BSc in Computer Science & Engineering</span>
-            <span class="fact-v">East West University · Final Year</span>
-          </div>
-
-          <div class="fact">
-            <span class="fact-k">Based in</span>
-            <span class="fact-v">Dhaka, Bangladesh</span>
-          </div>
-
-          <div class="fact">
-            <span class="fact-k">Focus</span>
-            <span class="fact-v">Full-Stack Development · AI/ML</span>
-          </div>
-
-          <div class="fact">
-            <span class="fact-k">Learning</span>
-            <span class="fact-v">Advanced AI · RAG · LLMs</span>
-          </div>
-
-        </aside>
       </div>
     </section>
 
     <!-- ===================== PROJECTS ===================== -->
-    <section class="section wrap" id="projects">
-      <div class="section-head reveal">
-        <span class="num">02</span>
-        <h2>Selected work</h2>
-      </div>
-
-      <p class="section-note reveal">
-        A production student management platform built to solve real operational
-        problems for teachers and students.
-      </p>
-
-      <div class="projects">
-
-        <article class="card reveal">
-          <div class="card-top">
-            <h3>Cooked by Ador — Student Management System</h3>
-            <span class="card-year">2026</span>
+    <section class="section" id="projects">
+      <div class="wrap">
+        <div class="section-head section-head-split reveal">
+          <div class="section-title">
+            <span class="num">[ 02 ]</span>
+            <h2>Selected work</h2>
           </div>
-
-          <p class="card-what">
-            A full-stack student management system built for a teacher to manage
-            students, courses, attendance, assignments, materials, announcements,
-            grades, and student progress. The system supports distinct teacher and
-            teaching-assistant roles, while students can access their courses,
-            download materials, submit assignments, track their progress, and
-            download grade reports.
+          <p class="section-note">
+            A production student management platform built to solve real operational
+            problems for teachers and students.
           </p>
+        </div>
 
-          <p class="card-learn">
-            <strong>What I learned:</strong>
-            Building and maintaining a real-world system taught me how to design
-            role-based access, manage files and data, handle authentication,
-            build production-ready features, and deploy and maintain a full-stack
-            application.
-          </p>
+        <!-- ============================================================
+             EDIT ME: each <article class="case"> is one project.
+             Copy one to add another; the number (01, 02...) is in .case-meta.
+             ============================================================ -->
+        <div class="cases">
 
-          <ul class="tags" aria-label="Technologies">
-            <li>React</li>
-            <li>Node.js</li>
-            <li>Express</li>
-            <li>MongoDB</li>
-            <li>Nginx</li>
-            <li>PM2</li>
-          </ul>
+          <article class="case reveal">
+            <div class="case-side">
+              <div class="case-meta">
+                <span class="case-idx">01</span>
+                <span aria-hidden="true">—</span>
+                <span class="case-year">2026</span>
+              </div>
+              <h3>Cooked by Ador — Student Management System</h3>
+              <ul class="tags" aria-label="Technologies">
+                <li>React</li>
+                <li>Node.js</li>
+                <li>Express</li>
+                <li>MongoDB</li>
+                <li>Nginx</li>
+                <li>PM2</li>
+              </ul>
+              <div class="case-links">
+                <a href="https://CookedByAdor.com" target="_blank" rel="noopener">Live site →</a>
+              </div>
+            </div>
 
-          <div class="card-links">
-            <a href="https://CookedByAdor.com" target="_blank" rel="noopener">
-              Live site
-            </a>
-          </div>
-        </article>
-      </div>
-      <div>
-        <article class="card reveal">
-          <div class="card-top">
-            <h3>EWU Bulletin — RAG Assistant</h3>
-            <span class="card-year">2026</span>
-          </div>
+            <div class="case-body">
+              <h4 class="label">Overview</h4>
+              <p class="case-what">
+                A full-stack student management system built for a teacher to manage
+                students, courses, attendance, assignments, materials, announcements,
+                grades, and student progress. The system supports distinct teacher and
+                teaching-assistant roles, while students can access their courses,
+                download materials, submit assignments, track their progress, and
+                download grade reports.
+              </p>
 
-          <p class="card-what">
-            A retrieval-augmented question-answering system built to answer questions
-            from the East West University bulletin. The system combines semantic
-            retrieval with BM25 lexical search to retrieve relevant information before
-            passing the context to a locally running language model.
-          </p>
+              <div class="learned">
+                <h4 class="label label-accent">What I learned</h4>
+                <p>
+                  Building and maintaining a real-world system taught me how to design
+                  role-based access, manage files and data, handle authentication,
+                  build production-ready features, and deploy and maintain a full-stack
+                  application.
+                </p>
+              </div>
+            </div>
+          </article>
 
-          <p class="card-learn">
-            <strong>What I learned:</strong>
-            Building the system gave me hands-on experience with document retrieval,
-            embeddings, hybrid search, context construction, and integrating local
-            LLMs into an end-to-end RAG pipeline.
-          </p>
+          <article class="case reveal">
+            <div class="case-side">
+              <div class="case-meta">
+                <span class="case-idx">02</span>
+                <span aria-hidden="true">—</span>
+                <span class="case-year">2026</span>
+              </div>
+              <h3>EWU Bulletin — RAG Assistant</h3>
+              <ul class="tags" aria-label="Technologies">
+                <li>Python</li>
+                <li>ChromaDB</li>
+                <li>BM25</li>
+                <li>LM Studio</li>
+                <li>Gemma</li>
+                <li>RAG</li>
+              </ul>
+              <div class="case-links">
+                <a href="https://github.com/mishkat2025/rag-project-bluebook" target="_blank" rel="noopener">Source →</a>
+              </div>
+            </div>
 
-          <ul class="tags" aria-label="Technologies">
-            <li>Python</li>
-            <li>ChromaDB</li>
-            <li>BM25</li>
-            <li>LM Studio</li>
-            <li>Gemma</li>
-            <li>RAG</li>
-          </ul>
+            <div class="case-body">
+              <h4 class="label">Overview</h4>
+              <p class="case-what">
+                A retrieval-augmented question-answering system built to answer questions
+                from the East West University bulletin. The system combines semantic
+                retrieval with BM25 lexical search to retrieve relevant information before
+                passing the context to a locally running language model.
+              </p>
 
-          <div class="card-links">
-            <a href="https://github.com/mishkat2025/rag-project-bluebook">Source</a>
-          </div>
-        </article>
+              <div class="learned">
+                <h4 class="label label-accent">What I learned</h4>
+                <p>
+                  Building the system gave me hands-on experience with document retrieval,
+                  embeddings, hybrid search, context construction, and integrating local
+                  LLMs into an end-to-end RAG pipeline.
+                </p>
+              </div>
+            </div>
+          </article>
+
+        </div>
       </div>
     </section>
 
     <!-- ===================== SKILLS ===================== -->
-    <section class="section wrap" id="skills">
-      <div class="section-head reveal">
-        <span class="num">03</span>
-        <h2>Tools I reach for</h2>
-      </div>
-
-      <!-- EDIT ME: be honest here. Anything listed is fair game in an interview. -->
-      <div class="skills">
-
-        <div class="skill-group reveal">
-          <h3>Languages</h3>
-          <ul>
-            <li>Python</li>
-            <li>JavaScript</li>
-            <li>C/C++</li>
-            <li>Java</li>
-            <li>SQL</li>
-          </ul>
+    <section class="section" id="skills">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <span class="num">[ 03 ]</span>
+          <h2>Tools I reach for</h2>
         </div>
 
-        <div class="skill-group reveal">
-          <h3>Web & Backend</h3>
-          <ul>
-            <li>React</li>
-            <li>Node.js</li>
-            <li>REST APIs</li>
-            <li>PostgreSQL</li>
-            <li>MongoDB</li>
-          </ul>
-        </div>
+        <!-- EDIT ME: be honest here. Anything listed is fair game in an interview. -->
+        <div class="skills">
 
-        <div class="skill-group reveal">
-          <h3>AI & Data</h3>
-          <ul>
-            <li>Machine Learning</li>
-            <li>PyTorch</li>
-            <li>scikit-learn</li>
-            <li>Pandas</li>
-            <li>RAG & LLMs</li>
-          </ul>
-        </div>
+          <div class="skill-group reveal">
+            <h3>Languages</h3>
+            <ul>
+              <li>Python</li>
+              <li>JavaScript</li>
+              <li>C/C++</li>
+              <li>Java</li>
+              <li>SQL</li>
+            </ul>
+          </div>
 
-        <div class="skill-group reveal">
-          <h3>Tools & Systems</h3>
-          <ul>
-            <li>Git & GitHub</li>
-            <li>Docker</li>
-            <li>Linux</li>
-            <li>PM2 & Nginx</li>
-            <li>GitHub Actions</li>
-          </ul>
-        </div>
+          <div class="skill-group reveal">
+            <h3>Web &amp; Backend</h3>
+            <ul>
+              <li>React</li>
+              <li>Node.js</li>
+              <li>REST APIs</li>
+              <li>PostgreSQL</li>
+              <li>MongoDB</li>
+            </ul>
+          </div>
 
+          <div class="skill-group reveal">
+            <h3>AI &amp; Data</h3>
+            <ul>
+              <li>Machine Learning</li>
+              <li>PyTorch</li>
+              <li>scikit-learn</li>
+              <li>Pandas</li>
+              <li>RAG &amp; LLMs</li>
+            </ul>
+          </div>
+
+          <div class="skill-group reveal">
+            <h3>Tools &amp; Systems</h3>
+            <ul>
+              <li>Git &amp; GitHub</li>
+              <li>Docker</li>
+              <li>Linux</li>
+              <li>PM2 &amp; Nginx</li>
+              <li>GitHub Actions</li>
+            </ul>
+          </div>
+
+        </div>
       </div>
     </section>
 
     <!-- ===================== PATH ===================== -->
-    <section class="section wrap" id="path">
-      <div class="section-head reveal">
-        <span class="num">04</span>
-        <h2>Path so far</h2>
+    <section class="section" id="path">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <span class="num">[ 04 ]</span>
+          <h2>Path so far</h2>
+        </div>
+
+        <!-- Add class="is-current" to an <li> to give it the green "ongoing" marker. -->
+        <ol class="timeline">
+
+          <li class="reveal">
+            <span class="t-when">2027</span>
+            <div class="t-body">
+              <h3>BSc in Computer Science &amp; Engineering</h3>
+              <p>
+                Completing my undergraduate degree at East West University,
+                building a foundation across software development, systems,
+                databases, and cybersecurity.
+              </p>
+            </div>
+          </li>
+
+          <li class="reveal is-current">
+            <span class="t-when">2026 &ndash; now</span>
+            <div class="t-body">
+              <h3>Software Development · Ador Coaching</h3>
+              <p>
+                Working on a real-world student portal, developing and maintaining
+                full-stack features across React, Node.js, databases, authentication,
+                file uploads, payments, and production deployment.
+              </p>
+            </div>
+          </li>
+
+          <li class="reveal is-current">
+            <span class="t-when">2026 &ndash; now</span>
+            <div class="t-body">
+              <h3>Exploring AI, LLMs &amp; RAG</h3>
+              <p>
+                Expanding from traditional software development into AI systems,
+                working with LLMs, embeddings, vector search, and retrieval-augmented
+                generation through practical projects.
+              </p>
+            </div>
+          </li>
+
+          <li class="reveal">
+            <span class="t-when">Next</span>
+            <div class="t-body">
+              <h3>Master's · Software / AI · Industry</h3>
+              <p>
+                Planning to pursue a master's degree while continuing to gain
+                professional experience and build practical systems at the
+                intersection of software engineering and AI.
+              </p>
+            </div>
+          </li>
+
+        </ol>
       </div>
-
-      <ol class="timeline">
-
-        <li class="reveal">
-          <span class="t-when">2027</span>
-          <div class="t-body">
-            <h3>BSc in Computer Science & Engineering</h3>
-            <p>
-              Completing my undergraduate degree at East West University,
-              building a foundation across software development, systems,
-              databases, and cybersecurity.
-            </p>
-          </div>
-        </li>
-
-        <li class="reveal">
-          <span class="t-when">2026 &ndash; now</span>
-          <div class="t-body">
-            <h3>Software Development · Ador Coaching</h3>
-            <p>
-              Working on a real-world student portal, developing and maintaining
-              full-stack features across React, Node.js, databases, authentication,
-              file uploads, payments, and production deployment.
-            </p>
-          </div>
-        </li>
-
-        <li class="reveal">
-          <span class="t-when">2026 &ndash; now</span>
-          <div class="t-body">
-            <h3>Exploring AI, LLMs & RAG</h3>
-            <p>
-              Expanding from traditional software development into AI systems,
-              working with LLMs, embeddings, vector search, and retrieval-augmented
-              generation through practical projects.
-            </p>
-          </div>
-        </li>
-
-        <li class="reveal">
-          <span class="t-when">Next</span>
-          <div class="t-body">
-            <h3>Master's · Software / AI · Industry</h3>
-            <p>
-              Planning to pursue a master's degree while continuing to gain
-              professional experience and build practical systems at the
-              intersection of software engineering and AI.
-            </p>
-          </div>
-        </li>
-
-      </ol>
     </section>
 
     <!-- ===================== CONTACT ===================== -->
-    <section class="section wrap contact" id="contact">
-      <div class="section-head reveal">
-        <span class="num">05</span>
-        <h2>Get in touch</h2>
+    <section class="section contact" id="contact">
+      <div class="wrap">
+        <div class="contact-inner">
+          <div class="section-head reveal">
+            <span class="num">[ 05 ]</span>
+            <h2>Get in touch</h2>
+          </div>
+
+          <p class="contact-lede reveal">
+            <!-- EDIT ME -->
+            I read everything and reply to most things. If you are hiring, or you just
+            want to talk about something I built, email is the fastest way.
+          </p>
+
+          <div class="contact-actions reveal">
+            <!-- EDIT ME: your address, in all three places below -->
+            <a class="btn btn-primary" href="mailto:sbmishkat10@gmail.com">
+              <svg class="btn-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <rect x="3" y="5" width="18" height="14" rx="1.5" />
+                <path d="m3.5 6.5 8.5 6.5 8.5-6.5" />
+              </svg>
+              sbmishkat10@gmail.com
+            </a>
+            <button class="btn" type="button" id="copyEmail" data-email="sbmishkat10@gmail.com">
+              <svg class="btn-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <rect x="8" y="8" width="12" height="12" rx="1.5" />
+                <path d="M16 8V5.5A1.5 1.5 0 0 0 14.5 4h-9A1.5 1.5 0 0 0 4 5.5v9A1.5 1.5 0 0 0 5.5 16H8" />
+              </svg>
+              <span class="copy-label">Copy address</span>
+            </button>
+          </div>
+
+          <div class="elsewhere reveal">
+            <span>Find me elsewhere:</span>
+            <ul class="inline-links" aria-label="Elsewhere">
+              <li><a href="https://github.com/mishkat2025" target="_blank" rel="noopener">GitHub</a></li>
+              <li><a href="https://www.linkedin.com/in/saleh-billah" target="_blank" rel="noopener">LinkedIn</a></li>
+            </ul>
+          </div>
+        </div>
       </div>
-
-      <p class="contact-lede reveal">
-        <!-- EDIT ME -->
-        I read everything and reply to most things. If you are hiring, or you just
-        want to talk about something I built, email is the fastest way.
-      </p>
-
-      <div class="contact-actions reveal">
-        <!-- EDIT ME: your address, in all three places below -->
-        <a class="btn btn-primary" href="mailto:sbmishkat10@gmail.com">sbmishkat10@gmail.com</a>
-        <button class="btn" type="button" id="copyEmail" data-email="sbmishkat10@gmail.com">Copy address</button>
-      </div>
-
-      <ul class="hero-links reveal" aria-label="Elsewhere">
-        <li><a href="https://github.com/mishkat2025">GitHub</a></li>
-        <li><a href="https://www.linkedin.com/in/saleh-billah">LinkedIn</a></li>
-      </ul>
     </section>
 
   </main>
 
   <footer class="site-footer">
     <div class="wrap footer-inner">
-      <!-- EDIT ME -->
-      <span>&copy; <span id="year">2027 </span>Abu Zafar Mohammad Saleh Billah Mishkat</span>
-      <span class="footer-note">Hosted on GitHub Pages.</span>
+      <div class="footer-meta">
+        <!-- EDIT ME -->
+        <span class="footer-copy">&copy; <span id="year">2027</span> Abu Zafar Mohammad Saleh Billah Mishkat</span>
+        <span class="footer-note">Dhaka, Bangladesh · UTC+6 — Hosted on GitHub Pages.</span>
+      </div>
+      <ul class="footer-links">
+        <li><a href="https://github.com/mishkat2025" target="_blank" rel="noopener">GitHub</a></li>
+        <li><a href="https://www.linkedin.com/in/saleh-billah/" target="_blank" rel="noopener">LinkedIn</a></li>
+      </ul>
     </div>
   </footer>
 
