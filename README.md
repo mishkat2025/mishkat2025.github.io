@@ -10,6 +10,7 @@ one JavaScript file. Open `index.html` in a browser and it works.
 | `index.html` | All the content. Every editable spot is marked `EDIT ME`. |
 | `styles.css` | All the styling. Colours are at the top in `:root`. |
 | `script.js` | Theme toggle, mobile menu, scroll animations, copy-email. |
+| `cat.js` | The robot cat that lives behind the page, and its basket. Tuning knobs at the top. |
 | `404.html` | Shown when someone hits a bad URL. |
 | `.nojekyll` | Tells GitHub Pages to serve files as-is. |
 

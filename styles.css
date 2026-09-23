@@ -761,20 +761,71 @@ h1 {
   color: var(--accent);
   margin-bottom: 14px;
 }
-.skill-group ul { display: grid; gap: 10px; }
+.skill-group ul { display: grid; gap: 14px; }
+
+/* Name across the top; underneath, a five-segment bar with the level
+   word beside it. The bar fill comes from data-level (1-5). Keeping
+   the word off the name's line means names never have to wrap. */
 .skill-group li {
-  display: flex;
+  --fill: 0%;
+  display: grid;
+  /* Fixed column for the level word, so every bar is the same length. */
+  grid-template-columns: minmax(0, 1fr) 84px;
   align-items: center;
-  gap: 10px;
+  gap: 6px 10px;
   font-size: 15px;
-  line-height: 1.4;
+  line-height: 1.35;
   color: var(--text);
 }
-.skill-group li::before {
+.skill-group li[data-level="1"] { --fill: 20%; }
+.skill-group li[data-level="2"] { --fill: 40%; }
+.skill-group li[data-level="3"] { --fill: 60%; }
+.skill-group li[data-level="4"] { --fill: 80%; }
+.skill-group li[data-level="5"] { --fill: 100%; }
+
+.skill-name { grid-column: 1 / -1; }
+.skill-name::before {
   content: "›";
   font-family: var(--mono);
   color: var(--accent);
+  margin-right: 8px;
 }
+
+.skill-tier {
+  grid-column: 2;
+  grid-row: 2;
+  text-align: right;
+  font-family: var(--mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  white-space: nowrap;
+}
+.skill-group li[data-level="5"] .skill-tier { color: var(--accent); }
+
+.skill-group li::after {
+  content: "";
+  grid-column: 1;
+  grid-row: 2;
+  height: 4px;
+  background: linear-gradient(to right,
+    var(--accent) 0 var(--fill),
+    var(--line) var(--fill) 100%);
+  /* Cut the bar into five separate segments. */
+  -webkit-mask: repeating-linear-gradient(to right, #000 0 calc(20% - 3px), transparent calc(20% - 3px) 20%);
+          mask: repeating-linear-gradient(to right, #000 0 calc(20% - 3px), transparent calc(20% - 3px) 20%);
+}
+
+.skills-scale {
+  margin: -14px 0 24px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.skills-scale span { color: var(--text-2); }
 
 
 /* ---------- 11. Path / timeline ---------- */
@@ -897,6 +948,21 @@ h1 {
 .js .reveal.is-in { opacity: 1; transform: none; }
 
 
+/* ---------- Cyber cat (cat.js) ----------
+   z-index -1 puts the canvas under every piece of content but above
+   the page background, so the cat is always BEHIND text and cards.
+   pointer-events: none means it can never block a click. */
+
+.cat-layer {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.6;
+}
+:root[data-theme="light"] .cat-layer { opacity: 0.55; }
+
+
 /* ---------- 15. Responsive ---------- */
 
 @media (max-width: 1180px) {
@@ -980,7 +1046,7 @@ h1 {
 /* ---------- 17. Print (so "save as PDF" is not embarrassing) ---------- */
 
 @media print {
-  .site-header, .menu-btn, .cta-row, .contact-actions, .hero-glow, .terminal { display: none; }
+  .site-header, .menu-btn, .cta-row, .contact-actions, .hero-glow, .terminal, .cat-layer { display: none; }
   body { background: #fff; color: #000; font-size: 11pt; }
   .hero { padding-top: 0; }
   .js .reveal { opacity: 1; transform: none; }

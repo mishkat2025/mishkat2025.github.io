@@ -360,50 +360,59 @@
           <h2>Tools I reach for</h2>
         </div>
 
-        <!-- EDIT ME: be honest here. Anything listed is fair game in an interview. -->
+        <p class="skills-scale reveal">
+          Self-assessed on five steps:
+          <span>Learning</span> · <span>Basic</span> · <span>Intermediate</span> ·
+          <span>Proficient</span> · <span>Advanced</span>
+        </p>
+
+        <!-- EDIT ME: be honest here. Anything listed is fair game in an interview.
+             Each skill has a data-level from 1 to 5, which fills the bar,
+             and a word to match:
+               1 Learning · 2 Basic · 3 Intermediate · 4 Proficient · 5 Advanced -->
         <div class="skills">
 
           <div class="skill-group reveal">
             <h3>Languages</h3>
             <ul>
-              <li>Python</li>
-              <li>JavaScript</li>
-              <li>C/C++</li>
-              <li>Java</li>
-              <li>SQL</li>
+              <li data-level="4"><span class="skill-name">Python</span><span class="skill-tier">Proficient</span></li>
+              <li data-level="4"><span class="skill-name">C/C++</span><span class="skill-tier">Proficient</span></li>
+              <li data-level="3"><span class="skill-name">JavaScript</span><span class="skill-tier">Intermediate</span></li>
+              <li data-level="2"><span class="skill-name">Java</span><span class="skill-tier">Basic</span></li>
+              <li data-level="2"><span class="skill-name">SQL</span><span class="skill-tier">Basic</span></li>
             </ul>
           </div>
 
           <div class="skill-group reveal">
             <h3>Web &amp; Backend</h3>
             <ul>
-              <li>React</li>
-              <li>Node.js</li>
-              <li>REST APIs</li>
-              <li>PostgreSQL</li>
-              <li>MongoDB</li>
+              <li data-level="3"><span class="skill-name">React</span><span class="skill-tier">Intermediate</span></li>
+              <li data-level="3"><span class="skill-name">Node.js</span><span class="skill-tier">Intermediate</span></li>
+              <li data-level="3"><span class="skill-name">REST APIs</span><span class="skill-tier">Intermediate</span></li>
+              <li data-level="2"><span class="skill-name">PostgreSQL</span><span class="skill-tier">Basic</span></li>
+              <li data-level="2"><span class="skill-name">MongoDB</span><span class="skill-tier">Basic</span></li>
             </ul>
           </div>
 
           <div class="skill-group reveal">
             <h3>AI &amp; Data</h3>
             <ul>
-              <li>Machine Learning</li>
-              <li>PyTorch</li>
-              <li>scikit-learn</li>
-              <li>Pandas</li>
-              <li>RAG &amp; LLMs</li>
+              <li data-level="4"><span class="skill-name">Machine Learning</span><span class="skill-tier">Proficient</span></li>
+              <li data-level="3"><span class="skill-name">PyTorch</span><span class="skill-tier">Intermediate</span></li>
+              <li data-level="3"><span class="skill-name">Pandas</span><span class="skill-tier">Intermediate</span></li>
+              <li data-level="3"><span class="skill-name">Transformers</span><span class="skill-tier">Intermediate</span></li>
+              <li data-level="2"><span class="skill-name">LLMs &amp; RAG</span><span class="skill-tier">Basic</span></li>
             </ul>
           </div>
 
           <div class="skill-group reveal">
             <h3>Tools &amp; Systems</h3>
             <ul>
-              <li>Git &amp; GitHub</li>
-              <li>Docker</li>
-              <li>Linux</li>
-              <li>PM2 &amp; Nginx</li>
-              <li>GitHub Actions</li>
+              <li data-level="3"><span class="skill-name">Git &amp; GitHub</span><span class="skill-tier">Intermediate</span></li>
+              <li data-level="3"><span class="skill-name">Coolify</span><span class="skill-tier">Intermediate</span></li>
+              <li data-level="2"><span class="skill-name">Docker</span><span class="skill-tier">Basic</span></li>
+              <li data-level="2"><span class="skill-name">PM2 &amp; Nginx</span><span class="skill-tier">Basic</span></li>
+              <li data-level="2"><span class="skill-name">Linux</span><span class="skill-tier">Basic</span></li>
             </ul>
           </div>
 
@@ -535,6 +544,7 @@
   </footer>
 
   <script src="script.js"></script>
+  <script src="cat.js"></script>
 </body>
 
 </html>
