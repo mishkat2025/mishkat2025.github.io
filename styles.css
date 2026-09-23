@@ -313,6 +313,14 @@ ul, ol, dl, dd { margin: 0; padding: 0; list-style: none; }
 .btn-mini:hover { border-color: var(--accent); color: var(--accent); }
 
 .menu-btn { display: none; }
+.i-close { display: none; }
+.menu-btn[aria-expanded="true"] .i-menu { display: none; }
+.menu-btn[aria-expanded="true"] .i-close { display: block; }
+
+.brand-short { display: none; }
+
+/* Swipe dots for the skills row on phones (built by script.js). */
+.skill-dots { display: none; }
 
 
 /* ---------- 4. Buttons & inline links ---------- */
@@ -1001,32 +1009,154 @@ h1 {
     border-bottom: 1px solid var(--line);
     display: none;
   }
-  .nav.is-open { display: flex; }
+  .nav.is-open {
+    display: flex;
+    /* Dim the page behind the open menu. The clip keeps the shade
+       off the header bar itself. */
+    box-shadow: 0 0 0 100vmax rgba(0, 0, 0, 0.55);
+    clip-path: inset(0 0 -100vmax 0);
+  }
   .nav a {
-    padding: 13px 0;
-    font-size: 15px;
+    padding: 15px 0;
+    font-family: var(--display);
+    font-size: 19px;
+    font-weight: 500;
+    color: var(--text);
     border-bottom: 1px solid var(--line-soft);
   }
   .nav a:last-child { border-bottom: none; }
   .nav a.is-active { border-bottom-color: var(--line-soft); }
 }
 
+/* ---------- Phones ---------- */
+
 @media (max-width: 680px) {
-  :root { --gutter: 20px; }
+  :root { --gutter: 20px; --section-y: 48px; }
   body { font-size: 15px; }
+
+  /* Header: a name that fits, and thumb-sized buttons (44px). */
   .btn-mini { display: none; }
-  .brand { font-size: 15px; }
+  .brand { font-size: 15px; padding-block: 9px; }
+  .brand-name { display: none; }
+  .brand-short { display: inline; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .header-actions { gap: 0; margin-right: -10px; }
+  .icon-btn { width: 44px; height: 44px; }
 
-  .hero-links { padding-left: 0; border-left: none; }
+  /* Hero: tighter, so the headline and buttons land on the first screen. */
+  .hero { padding-top: calc(64px + 28px); padding-bottom: 44px; }
+  .hero-grid { gap: 32px; }
+  .eyebrow {
+    padding: 6px 10px;
+    margin-bottom: 20px;
+    font-size: 10px;
+    letter-spacing: 0.06em;
+  }
+  h1 { font-size: 2rem; line-height: 1.12; margin-bottom: 18px; }
+  .lede { font-size: 15.5px; line-height: 1.65; margin-bottom: 26px; }
+  .hero-actions { gap: 10px; }
   .cta-row { width: 100%; }
-  .cta-row .btn { flex: 1 1 auto; }
+  .cta-row .btn { flex: 1 1 0; min-height: 48px; }
+  .hero-links { padding-left: 0; border-left: none; }
 
-  .prose, .contact-lede { font-size: 16px; }
-  .case { padding-block: 36px; }
-  .skills { grid-template-columns: 1fr; }
-  .timeline li { grid-template-columns: 1fr; gap: 8px; }
+  /* Small text links get a tall invisible hit area. */
+  .inline-links a,
+  .footer-links a { display: inline-block; padding-block: 13px; }
+
+  .terminal { font-size: 11px; }
+  .term-body { padding: 14px; }
+  .t-output { font-size: 10.5px; }
+
+  .section-head { margin-bottom: 24px; }
+  .section-head-split { padding-bottom: 18px; }
+
+  /* About: short facts side by side instead of one long column. */
+  .prose { font-size: 15.5px; line-height: 1.7; }
+  .dossier { padding: 18px; }
+  .dossier dl { display: grid; grid-template-columns: 1fr 1fr; column-gap: 16px; }
+  .fact { grid-column: 1 / -1; }
+  .fact:nth-child(2), .fact:nth-child(4) { grid-column: auto; }
+  .fact:nth-child(3) { order: 1; }                    /* Focus goes last, full width */
+
+  /* Projects: read top to bottom as one card, link at the end. */
+  .case { display: flex; flex-direction: column; gap: 14px; padding-block: 32px; }
+  .case-side { display: contents; }
+  .case-meta { order: 1; }
+  .case h3 { order: 2; font-size: 1.45rem; }
+  .case .tags { order: 3; }
+  .case-body { order: 4; padding-top: 16px; }
+  .case-links { order: 5; padding-top: 0; }
+  .case-links a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 46px;
+    border: 1px solid var(--accent-edge);
+    border-radius: var(--r-sm);
+    background: var(--accent-wash);
+  }
+  .case-links a:hover { text-decoration: none; }
+  .case-what { font-size: 15px; }
+
+  /* Skills: one swipeable row of cards instead of four stacked. */
+  .skills {
+    grid-template-columns: none;
+    grid-auto-flow: column;
+    grid-auto-columns: 84%;
+    gap: 12px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    margin-inline: calc(var(--gutter) * -1);
+    padding-inline: var(--gutter);
+    scroll-padding-inline: var(--gutter);
+    scrollbar-width: none;
+    overscroll-behavior-x: contain;
+  }
+  .skills::-webkit-scrollbar { display: none; }
+  .skill-group { scroll-snap-align: start; }
+  .skills-scale { margin-top: -8px; line-height: 1.8; }
+
+  .skill-dots {
+    display: flex;
+    justify-content: center;
+    gap: 2px;
+    margin-top: 10px;
+  }
+  .skill-dots button {
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+  }
+  .skill-dots button::before {
+    content: "";
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--line);
+    transition: background-color 0.2s var(--ease), width 0.2s var(--ease);
+  }
+  .skill-dots button[aria-current="true"]::before {
+    width: 18px;
+    border-radius: 4px;
+    background: var(--accent);
+  }
+
+  /* Path */
+  .timeline li { grid-template-columns: 1fr; gap: 6px; padding-block: 20px; }
   .t-when { padding-top: 0; }
-  .contact-actions .btn { flex: 1 1 auto; }
+  .t-body p { font-size: 14.5px; }
+
+  /* Contact: full-width buttons, stacked. */
+  .contact-lede { font-size: 15.5px; }
+  .contact-actions { flex-direction: column; }
+  .contact-actions .btn { width: 100%; min-height: 48px; }
+  .elsewhere { gap: 0 18px; }
+
+  .site-footer { padding-block: 28px; }
 }
 
 

@@ -50,7 +50,10 @@
   function closeMenu() {
     if (!nav) return;
     nav.classList.remove("is-open");
-    if (menuBtn) menuBtn.setAttribute("aria-expanded", "false");
+    if (menuBtn) {
+      menuBtn.setAttribute("aria-expanded", "false");
+      menuBtn.setAttribute("aria-label", "Open menu");
+    }
   }
 
   if (menuBtn && nav) {
@@ -68,6 +71,51 @@
     document.addEventListener("keydown", function (event) {
       if (event.key === "Escape") closeMenu();
     });
+
+    // Tapping the dimmed page outside the menu closes it too.
+    document.addEventListener("click", function (event) {
+      if (!nav.classList.contains("is-open")) return;
+      if (nav.contains(event.target) || menuBtn.contains(event.target)) return;
+      closeMenu();
+    });
+  }
+
+
+  /* ---------- 2b. Skills swipe dots (phones) ----------
+     On phones the skill cards become a swipeable row (see styles.css).
+     These dots show which card you're on, and jump to one when tapped.
+     On wider screens the dots are hidden by CSS and do nothing. */
+
+  var skillRow = document.querySelector(".skills");
+
+  if (skillRow) {
+    var cards = skillRow.querySelectorAll(".skill-group");
+    var dots = document.createElement("div");
+    dots.className = "skill-dots";
+    dots.setAttribute("aria-label", "Skill groups");
+
+    Array.prototype.forEach.call(cards, function (card, i) {
+      var dot = document.createElement("button");
+      dot.type = "button";
+      var title = card.querySelector("h3");
+      dot.setAttribute("aria-label", "Show " + (title ? title.textContent : "group " + (i + 1)));
+      dot.addEventListener("click", function () {
+        skillRow.scrollTo({ left: card.offsetLeft - skillRow.offsetLeft - parseFloat(getComputedStyle(skillRow).paddingLeft), behavior: "smooth" });
+      });
+      dots.appendChild(dot);
+    });
+    skillRow.parentNode.insertBefore(dots, skillRow.nextSibling);
+
+    var markDot = function () {
+      var step = cards.length > 1 ? cards[1].offsetLeft - cards[0].offsetLeft : 1;
+      var current = Math.round(skillRow.scrollLeft / step);
+      Array.prototype.forEach.call(dots.children, function (dot, i) {
+        dot.setAttribute("aria-current", i === current ? "true" : "false");
+      });
+    };
+    skillRow.addEventListener("scroll", markDot, { passive: true });
+    window.addEventListener("resize", markDot);
+    markDot();
   }
 
 
