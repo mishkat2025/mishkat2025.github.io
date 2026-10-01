@@ -19,7 +19,7 @@
   <style>
     @page {
       size: Letter;
-      margin: 0.55in 0.7in 0.5in;
+      margin: 0.45in 0.6in 0.4in;
     }
 
     * {
@@ -30,14 +30,14 @@
 
     body {
       font-family: "Open Sans", Arial, sans-serif;
-      font-size: 10pt;
-      line-height: 1.42;
+      font-size: 9.5pt;
+      line-height: 1.38;
       color: #4a4a4a;
       background: #fff;
     }
 
     .page {
-      max-width: 7.1in;
+      max-width: 7.3in;
       margin: 0 auto;
     }
 
@@ -49,7 +49,7 @@
 
       .page {
         background: #fff;
-        padding: 0.55in 0.7in 0.5in;
+        padding: 0.45in 0.6in 0.4in;
         max-width: 8.5in;
         box-shadow: 0 2px 16px rgba(0, 0, 0, .12);
       }
@@ -62,7 +62,7 @@
     h1 {
       font-family: "EB Garamond", Georgia, serif;
       font-weight: 400;
-      font-size: 30pt;
+      font-size: 27pt;
       line-height: 1.1;
       color: #2b2b2b;
     }
@@ -76,11 +76,11 @@
     }
 
     .contact {
-      margin-top: 14px;
-      padding: 8px 0;
+      margin-top: 10px;
+      padding: 6px 0;
       border-top: 1px solid #9a9a9a;
       border-bottom: 1px solid #9a9a9a;
-      font-size: 9.5pt;
+      font-size: 9pt;
     }
 
     .contact a {
@@ -92,8 +92,13 @@
       margin: 0 7px;
     }
 
+    .contact .address {
+      display: block;
+      margin-top: 2px;
+    }
+
     section {
-      margin-top: 18px;
+      margin-top: 13px;
     }
 
     h2 {
@@ -104,7 +109,7 @@
       word-spacing: .3em;
       text-transform: uppercase;
       color: #2b2b2b;
-      margin-bottom: 8px;
+      margin-bottom: 5px;
     }
 
     .row {
@@ -144,6 +149,14 @@
       font-size: 8pt;
     }
 
+    .edu .role {
+      margin-top: 3px;
+    }
+
+    .edu .role:first-of-type {
+      margin-top: 0;
+    }
+
     .edu .when {
       text-transform: none;
     }
@@ -156,9 +169,13 @@
       margin-top: 2px;
     }
 
-    .skills strong {
+    strong {
       font-weight: 600;
       color: #3a3a3a;
+    }
+
+    .langs span {
+      margin-right: 28px;
     }
   </style>
 </head>
@@ -168,25 +185,53 @@
 
     <header>
       <h1>Abu Zafar Mohammad Saleh Billah Mishkat</h1>
-      <p class="title">Full-Stack Software Developer | Data Science &amp; AI</p>
+      <p class="title">Full-Stack Developer, Data Science and AI</p>
       <p class="contact">
-        <a href="mailto:sbmishkat10@gmail.com">sbmishkat10@gmail.com</a><span class="sep">|</span>Dhaka, Bangladesh<span
-          class="sep">|</span><a href="https://www.linkedin.com/in/saleh-billah/">linkedin.com/in/saleh-billah</a><span
-          class="sep">|</span><a href="https://github.com/mishkat2025">github.com/mishkat2025</a>
+        <a href="mailto:sbmishkat10@gmail.com">sbmishkat10@gmail.com</a><span class="sep">|</span>0174951015 (Mobile
+        and WhatsApp)<span class="sep">|</span><a
+          href="https://www.linkedin.com/in/saleh-billah/">linkedin.com/in/saleh-billah</a><span class="sep">|</span><a
+          href="https://github.com/mishkat2025">github.com/mishkat2025</a>
+        <span class="address">22/3/1 North South Tower, Road 3, Nandipara, Khilgaon, Dhaka, Bangladesh</span>
       </p>
     </header>
 
     <section>
       <h2>Professional Summary</h2>
       <p>
-        Full-stack software developer and final-year Computer Science &amp; Engineering student at East West
-        University, majoring in Data Science &amp; Artificial Intelligence. Designed, built and deployed a production
-        student management system for a coaching business, covering the React front end, Node.js and Express API,
-        MongoDB database, role-based authentication and self-managed deployment with PM2 and Nginx. Builds
-        retrieval-augmented generation (RAG) applications using hybrid search and locally hosted large language
-        models. Available for freelance projects and full-time roles in software development, machine learning and
-        AI.
+        Full-stack developer with a Data Science and AI focus who can take a product from a client's requirements to
+        a live, maintained system. Builds web applications end to end with React, Node.js, Express and MongoDB,
+        designs role-based access and authentication, and deploys and runs them on self-managed Linux servers with
+        Nginx and PM2. On the AI side, builds retrieval-augmented generation (RAG) pipelines using hybrid search and
+        locally hosted language models, backed by Python, PyTorch and machine learning fundamentals. Learns the
+        technology underneath each tool well enough to troubleshoot it and own it in production.
       </p>
+    </section>
+
+    <section class="edu">
+      <h2>Education</h2>
+
+      <div class="role">
+        <div class="row">
+          <span>BSc in Computer Science and Engineering | East West University, Dhaka</span>
+          <span class="when">Expected: 2027</span>
+        </div>
+        <p class="edu-note">Major: Intelligent Systems and Data Science. Additional coursework in Software
+          Engineering.</p>
+      </div>
+
+      <div class="role">
+        <div class="row">
+          <span>Alim (Higher Secondary), GPA 4.81 out of 5.00 | Tamirul Millat Kamil Madrasah</span>
+          <span class="when">2021</span>
+        </div>
+      </div>
+
+      <div class="role">
+        <div class="row">
+          <span>Dakhil (Secondary), GPA 4.72 out of 5.00 | Tanzimul Ummah Alim Madrasah</span>
+          <span class="when">2019</span>
+        </div>
+      </div>
     </section>
 
     <section>
@@ -194,18 +239,19 @@
 
       <div class="role">
         <div class="row">
-          <span><span class="role-title">Freelance Full-Stack Developer</span> | Ador Coaching (Client), Dhaka</span>
+          <span><span class="role-title">Freelance Full-Stack Developer</span> | Coaching Business (Client), Dhaka</span>
           <span class="when">2026 – Present</span>
         </div>
         <ul class="bullets">
-          <li>Delivered Cooked by Ador (CookedByAdor.com), a full-stack student management system built with React,
-            Node.js, Express and MongoDB, taking it from requirements to production launch.</li>
-          <li>Implemented role-based access control for teachers, teaching assistants and students across courses,
-            attendance, assignments, grades, announcements and progress tracking.</li>
-          <li>Built authentication, file uploads for course materials and assignment submissions, payment handling and
-            downloadable grade reports.</li>
-          <li>Maintain the live application on a self-managed server using PM2 and Nginx, handling deployments,
-            feature updates and troubleshooting.</li>
+          <li>The teacher needed one system to manage students, courses and attendance, and a way to give parents
+            prompt reports on how their children were performing.</li>
+          <li>Designed and built a role-based student management system with separate access for teachers, teaching
+            assistants and students, covering courses, attendance, assignments, materials, announcements, grades and
+            progress tracking. Built with React, Node.js, Express and MongoDB, with authentication, file uploads and
+            payment handling, and deployed on a self-managed server using Nginx and PM2.</li>
+          <li>The system is live in production. The teacher now manages courses, attendance and grading from one
+            place, students submit work and track their own progress, and downloadable grade reports keep parents
+            informed. Maintenance and feature updates are ongoing.</li>
         </ul>
       </div>
     </section>
@@ -219,33 +265,33 @@
           <span class="when">2026</span>
         </div>
         <ul class="bullets">
-          <li>Built a retrieval-augmented generation (RAG) question-answering system in Python that answers questions
-            about programs and policies in the East West University bulletin.</li>
-          <li>Implemented hybrid retrieval combining semantic search over ChromaDB vector embeddings with BM25 keyword
-            search to surface the most relevant passages.</li>
-          <li>Integrated a locally hosted Gemma model through LM Studio to generate answers grounded in the retrieved
-            bulletin text.</li>
+          <li>Program and policy details are spread across the long East West University bulletin, which makes a
+            specific answer slow to find by reading.</li>
+          <li>Built a retrieval-augmented generation (RAG) question-answering system in Python. Implemented hybrid
+            retrieval that combines semantic search over ChromaDB vector embeddings with BM25 keyword search, and
+            integrated a locally hosted Gemma model through LM Studio to answer from the retrieved passages.</li>
+          <li>The assistant works as a chatbot that answers bulletin questions in plain language, with responses
+            grounded in the retrieved bulletin text and the language model running entirely on a local machine.</li>
         </ul>
       </div>
     </section>
 
-    <section class="edu">
-      <h2>Education</h2>
-      <div class="row">
-        <span>BSc in Computer Science &amp; Engineering | East West University, Dhaka</span>
-        <span class="when">Expected: 2027</span>
-      </div>
-      <p class="edu-note">Major: Data Science &amp; Artificial Intelligence. Additional coursework in software
-        engineering.</p>
-    </section>
-
     <section class="skills">
       <h2>Skills</h2>
-      <p><strong>Languages:</strong> Python, C/C++, JavaScript, SQL, Java</p>
-      <p><strong>AI &amp; Data:</strong> Machine Learning, PyTorch, Pandas, Transformers, Large Language
+      <p><strong>Programming:</strong> Python, C/C++, JavaScript, SQL, Java</p>
+      <p><strong>AI and Data:</strong> Machine Learning, PyTorch, Pandas, Transformers, Large Language
         Models (LLMs), <span style="white-space: nowrap">Retrieval-Augmented Generation (RAG)</span>, ChromaDB</p>
-      <p><strong>Web &amp; Backend:</strong> React, Node.js, Express, REST APIs, MongoDB, PostgreSQL</p>
-      <p><strong>Tools &amp; Deployment:</strong> Git, GitHub, Docker, Linux, Nginx, PM2, Coolify</p>
+      <p><strong>Web and Backend:</strong> React, Node.js, Express, REST APIs, MongoDB, PostgreSQL</p>
+      <p><strong>Tools and Deployment:</strong> Git, GitHub, Docker, Linux, Nginx, PM2, Coolify</p>
+    </section>
+
+    <section class="langs">
+      <h2>Languages</h2>
+      <p>
+        <span><strong>Bangla:</strong> Native</span>
+        <span><strong>English:</strong> Proficient</span>
+        <span><strong>Arabic:</strong> Moderate</span>
+      </p>
     </section>
 
   </div>
