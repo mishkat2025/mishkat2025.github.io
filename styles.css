@@ -970,6 +970,12 @@ h1 {
 }
 :root[data-theme="light"] .cat-layer { opacity: 0.55; }
 
+/* One-column layouts leave no space under the terminal card, so give
+   the cat a yard there for its pod. cat.js sets .has-cat on <html>. */
+@media screen and (max-width: 1024px) {
+  .has-cat .hero { padding-bottom: calc(clamp(64px, 8vw, 80px) + 104px); }
+}
+
 
 /* ---------- 15. Responsive ---------- */
 

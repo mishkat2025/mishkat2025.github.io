@@ -8,8 +8,10 @@
    What it does:
      - lives by its charging pod in the empty space under the
        terminal card (its "home"), sits, blinks, grooms itself
-     - now and then strolls around the visible page, then walks
-       back home
+     - stays inside the hero section (its "area") and never
+       wanders into the rest of the page
+     - now and then strolls around the visible part of the hero,
+       then walks back home
      - walks BEHIND text, but treats solid blocks (cards, buttons,
        tags, the terminal...) as walls and finds a way around them
      - notices the cursor, trots over, and bats at it from just
@@ -34,16 +36,19 @@
    tell us when the mouse is "over" the cat. So we track the mouse
    ourselves and hit-test in the cat's own coordinates (onCat()).
 
-   Switched off on touch devices, narrow screens, and for anyone
-   whose system asks for reduced motion.
+   Runs at every screen size. On one-column layouts the hero gets
+   extra room under the terminal card for the pod (the .has-cat
+   rule in styles.css). On touch screens there is no cursor to
+   play with, so the cat stays around its home. Switched off only
+   for anyone whose system asks for reduced motion, and paused
+   while the hero is scrolled out of view.
    ============================================================ */
 
 (function () {
   "use strict";
 
   var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-  var finePointer = window.matchMedia("(hover: hover) and (pointer: fine)");
-  var wideEnough = window.matchMedia("(min-width: 900px)");
+  var hasMouse = window.matchMedia("(hover: hover) and (pointer: fine)");
 
   var canvas = document.createElement("canvas");
   canvas.className = "cat-layer";
@@ -169,13 +174,42 @@
 
   var particles = [];
 
-  var W = 0, H = 0, docH = 0, dpr = 1;
+  var W = 0, H = 0, dpr = 1;
 
-  // Page-coordinate bounds for the cat's ground point.
-  function minX() { return 50 * S; }
-  function maxX() { return W - 50 * S; }
-  function minY() { return HEADER + 80 * S; }
-  function maxY() { return docH - 8; }
+
+  /* ---------- Area: the hero section, the only place the cat goes ---------- */
+
+  // The hero's box in page coordinates.
+  var area = { left: 0, right: 0, top: 0, bottom: 0 };
+
+  function computeArea() {
+    var hero = document.querySelector(".hero");
+    if (hero) {
+      var r = hero.getBoundingClientRect();
+      area = {
+        left: Math.max(0, r.left + window.scrollX),
+        right: Math.min(W, r.right + window.scrollX),
+        top: r.top + window.scrollY,
+        bottom: r.bottom + window.scrollY
+      };
+    } else {                                    // no hero? the first screen
+      area = { left: 0, right: W, top: 0, bottom: H };
+    }
+  }
+
+  // Bounds for the cat's ground point, inside the area.
+  function minX() { return area.left + 50 * S; }
+  function maxX() { return area.right - 50 * S; }
+  function minY() { return area.top + HEADER + 80 * S; }
+  function maxY() { return area.bottom - 8; }
+
+  function inArea(x, y) {
+    return x >= area.left && x <= area.right && y >= area.top && y <= area.bottom;
+  }
+
+  function areaVisible() {
+    return area.bottom > window.scrollY && area.top < window.scrollY + H;
+  }
 
 
   /* ---------- Home: the space under the terminal card ---------- */
@@ -183,38 +217,59 @@
   var home = { x0: 0, x1: 0, y0: 0, y1: 0 };
   var dock = pt(0, 0);       // bottom-centre of the charging pod
 
+  // Can the pod stand here, and the cat sleep in it?
+  function podFits(d) {
+    var reach = 52 * S;                         // the charging tower is the widest part
+    return d.x - reach >= area.left && d.x + reach <= area.right &&
+           freeAt(d.x, d.y - 15 * S) && freeAt(d.x - 70 * S, d.y + 12 * S);
+  }
+
   function computeHome() {
     var sx = window.scrollX, sy = window.scrollY;
     var term = document.querySelector(".terminal");
-    var hero = document.querySelector(".hero");
+    var options = [];
 
-    if (!term || !hero) {                       // no hero? bottom-right of the first screen
-      home = { x0: W * 0.7, x1: W * 0.9, y0: H * 0.7, y1: H * 0.85 };
-    } else {
+    if (term) {
       var t = term.getBoundingClientRect();
-      var h = hero.getBoundingClientRect();
 
-      // Just far enough below the card that the cat can't touch it.
-      var x0 = t.left + sx + 40 * S;
-      var x1 = t.right + sx - 40 * S;
-      var y0 = t.bottom + sy + FOOT_H + PAD + CELL;
-      var y1 = h.bottom + sy - 16;
+      // Under the card: just far enough below it that the cat can't
+      // touch it. On one-column layouts styles.css adds room here.
+      options.push({
+        x0: t.left + sx + 40 * S,
+        x1: t.right + sx - 40 * S,
+        y0: t.bottom + sy + FOOT_H + PAD + CELL,
+        y1: area.bottom - 16
+      });
 
-      // Stacked (narrower) layout leaves no room underneath:
-      // live beside the card instead.
-      if (y1 - y0 < 40) {
-        x0 = t.right + sx + FOOT_W + PAD + CELL;
-        x1 = Math.max(x0, W - 50 * S);
-        y0 = t.top + sy + FOOT_H + 24;
-        y1 = t.bottom + sy;
-      }
-
-      home = { x0: x0, x1: Math.max(x0, x1), y0: y0, y1: Math.max(y0, y1) };
+      // Beside the card, if the page leaves room there.
+      options.push({
+        x0: t.right + sx + FOOT_W + PAD + CELL,
+        x1: maxX(),
+        y0: t.top + sy + FOOT_H + 24,
+        y1: t.bottom + sy
+      });
     }
 
-    // Basket bottom sits a little into home so the cat's spot inside
-    // it (see sleepSpot) is still clear of the terminal card.
-    dock = pt(lerp(home.x0, home.x1, 0.68), home.y0 + 16 * S);
+    // Last resort: the bottom-right corner of the area.
+    options.push({
+      x0: Math.max(minX(), maxX() - 200 * S),
+      x1: maxX(),
+      y0: maxY() - 40 * S,
+      y1: maxY() - 16 * S
+    });
+
+    for (var i = 0; i < options.length; i++) {
+      var o = options[i];
+      if (o.x1 - o.x0 < 0 || o.y1 - o.y0 < 24) continue;
+      // Basket bottom sits a little into home so the cat's spot inside
+      // it (see sleepSpot) is still clear of the terminal card.
+      var d = pt(lerp(o.x0, o.x1, 0.68), o.y0 + 16 * S);
+      if (podFits(d) || i === options.length - 1) {
+        home = o;
+        dock = d;
+        return;
+      }
+    }
   }
 
   // Curled up inside the basket, body showing above the rim.
@@ -242,7 +297,7 @@
   function buildGrid() {
     var sx = window.scrollX, sy = window.scrollY;
     var cols = Math.max(1, Math.ceil(W / CELL));
-    var rows = Math.max(1, Math.ceil(docH / CELL));
+    var rows = Math.max(1, Math.ceil((area.bottom + CELL) / CELL));   // nothing below the area
     var b = new Uint8Array(cols * rows);
     var c, r;
 
@@ -512,10 +567,11 @@
       var target;
       if (cat.sleepAfter) {
         target = sleepSpot();
-      } else if (atHome() && homeVisible() && Math.random() < 0.3) {
-        // An occasional stroll somewhere on the visible screen.
+      } else if (hasMouse.matches && atHome() && homeVisible() && Math.random() < 0.3) {
+        // An occasional stroll somewhere in the visible part of the area.
         var top = window.scrollY;
-        target = randomFree(minX(), maxX(), top + HEADER + FOOT_H, top + H - 8);
+        target = randomFree(minX(), maxX(),
+          Math.max(minY(), top + HEADER + FOOT_H), Math.min(maxY(), top + H - 8));
       } else {
         // Pottering about at home, or heading back to it.
         target = randomFree(home.x0, home.x1, home.y0, home.y1);
@@ -608,7 +664,9 @@
     var hy = cat.y + cat.headLocal.y * S;
     var mouseDist = Math.hypot(mouse.x - hx, mouse.y - hy);
 
-    var interested = recent && now > cat.cooldown && mouseDist < NOTICE_RANGE;
+    // The cat only plays with a cursor that is inside its area.
+    var mouseHere = mouse.inside && inArea(mouse.x, mouse.y);
+    var interested = recent && mouseHere && now > cat.cooldown && mouseDist < NOTICE_RANGE;
 
     // Targets for this frame; each state overrides what it needs.
     var moving = false, arrived = false;
@@ -670,7 +728,7 @@
           }
         }
         if (follow(CHASE_SPEED, dt)) enter("reach", now);
-        if (!mouse.inside || now - cat.attnStart > ATTENTION) getBored(now);
+        if (!mouseHere || now - cat.attnStart > ATTENTION) getBored(now);
         break;
 
       case "reach":
@@ -691,7 +749,7 @@
           nav.goal = null;
           enter("chase", now);
         }
-        if (!mouse.inside || now - cat.attnStart > ATTENTION + 4000 ||
+        if (!mouseHere || now - cat.attnStart > ATTENTION + 4000 ||
             now - mouse.lastMove > 5000) {
           getBored(now);
         }
@@ -1322,9 +1380,9 @@
   /* ---------- Measuring the page ---------- */
 
   function measure() {
-    docH = document.documentElement.scrollHeight;
-    computeHome();
+    computeArea();
     buildGrid();
+    computeHome();                              // needs the grid to check the pod fits
   }
 
   function resize() {
@@ -1350,7 +1408,7 @@
 
   /* ---------- Main loop, and when to run at all ---------- */
 
-  var running = false, rafId = 0, last = 0, lastMeasure = 0;
+  var running = false, rafId = 0, last = 0, lastMeasure = 0, shown = true;
 
   function frame(now) {
     var dt = Math.min(0.05, (now - last) / 1000);    // cap after tab switches
@@ -1363,14 +1421,23 @@
       lastMeasure = now;
     }
 
-    update(dt, now);
-    draw(now);
+    // Nothing to see while the hero is scrolled away: rest until it is back.
+    if (areaVisible()) {
+      update(dt, now);
+      draw(now);
+      shown = true;
+    } else if (shown) {
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      shown = false;
+    }
     rafId = requestAnimationFrame(frame);
   }
 
   function start() {
     if (running) return;
     running = true;
+    document.documentElement.classList.add("has-cat");   // room for the pod, see styles.css
     canvas.style.display = "";
     resize();
     last = lastMeasure = performance.now();
@@ -1381,18 +1448,17 @@
   function stop() {
     running = false;
     cancelAnimationFrame(rafId);
+    document.documentElement.classList.remove("has-cat");
     canvas.style.display = "none";
   }
 
   function check() {
-    if (finePointer.matches && wideEnough.matches && !reduceMotion.matches) start();
+    if (!reduceMotion.matches) start();
     else stop();
   }
 
-  [reduceMotion, finePointer, wideEnough].forEach(function (mq) {
-    if (mq.addEventListener) mq.addEventListener("change", check);
-    else if (mq.addListener) mq.addListener(check);     // older Safari
-  });
+  if (reduceMotion.addEventListener) reduceMotion.addEventListener("change", check);
+  else if (reduceMotion.addListener) reduceMotion.addListener(check);   // older Safari
 
   window.addEventListener("resize", function () { if (running) resize(); });
 
