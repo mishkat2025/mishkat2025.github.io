@@ -710,7 +710,7 @@ h1 {
   color: var(--text);
 }
 
-.case-links { padding-top: 4px; }
+.case-links { padding-top: 4px; display: flex; flex-wrap: wrap; gap: 10px 22px; }
 .case-links a {
   font-family: var(--mono);
   font-size: 12px;
@@ -1092,6 +1092,7 @@ h1 {
   .case-body { order: 4; padding-top: 16px; }
   .case-links { order: 5; padding-top: 0; }
   .case-links a {
+    flex: 1 1 140px;
     display: flex;
     align-items: center;
     justify-content: center;
