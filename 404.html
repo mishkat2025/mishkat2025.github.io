@@ -12,15 +12,7 @@
 <link rel="stylesheet" href="styles.css">
 
 <script>
-  (function () {
-    document.documentElement.classList.add("js");
-    try {
-      var saved = localStorage.getItem("theme");
-      if (saved === "dark" || saved === "light") {
-        document.documentElement.setAttribute("data-theme", saved);
-      }
-    } catch (e) {}
-  })();
+  document.documentElement.classList.add("js");
 </script>
 
 <style>

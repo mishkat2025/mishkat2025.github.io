@@ -106,22 +106,15 @@
   }
 
 
-  /* ---------- Colours follow the site theme ---------- */
+  /* ---------- Colours come from the site's CSS variables ---------- */
 
   var colors = { accent: "#00ff88", bg: "#0c0d0e" };
 
-  function readColors() {
+  (function readColors() {
     var cs = getComputedStyle(document.documentElement);
     colors.accent = cs.getPropertyValue("--accent").trim() || colors.accent;
     colors.bg = cs.getPropertyValue("--bg").trim() || colors.bg;
-    roomKey = "";                               // repaint the room in the new theme
-  }
-
-  readColors();
-  new MutationObserver(readColors).observe(document.documentElement, {
-    attributes: true,
-    attributeFilter: ["data-theme"]
-  });
+  })();
 
 
   /* ---------- Mouse tracking ---------- */
@@ -1387,8 +1380,8 @@
 
 
   /* ---------- The room behind the hero ----------
-     Painted once into its own canvas whenever the layout or the theme
-     changes, then copied under the cat every frame. Drawn in the same
+     Painted once into its own canvas whenever the layout changes, then
+     copied under the cat every frame. Drawn in the same
      neon line style as the cat, and kept faint so the text stays easy
      to read (the whole layer is also at reduced opacity in styles.css). */
 
@@ -1658,8 +1651,6 @@
     if (now - lastMeasure > 2000) {
       measure();
       lastMeasure = now;
-    } else if (!roomKey) {
-      paintRoom();                              // the theme just changed
     }
 
     // Nothing to see while the hero is scrolled away: rest until it is back.

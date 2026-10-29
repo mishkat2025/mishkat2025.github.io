@@ -8,7 +8,7 @@
 /* ---------- 1. Design tokens ---------- */
 
 :root {
-  /* Dark theme (default) */
+  /* The site is dark only. */
   --bg:          #0c0d0e;   /* page canvas */
   --bg-deep:     #08080a;   /* footer */
   --surface-1:   #131417;   /* cards, panels */
@@ -44,33 +44,6 @@
   --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
 
   color-scheme: dark;
-}
-
-/* Light theme — only when the visitor picks it with the toggle. */
-:root[data-theme="light"] {
-  --bg:          #f6f7f6;
-  --bg-deep:     #eceeed;
-  --surface-1:   #ffffff;
-  --surface-2:   #f0f2f1;
-  --surface-3:   #e7eae8;
-  --line:        #d9dddb;
-  --line-soft:   #e3e6e4;
-
-  --text-hi:     #0b0c0d;
-  --text:        #26292c;
-  --text-2:      #50565c;
-  --muted:       #6b7178;
-
-  --accent:      #047a44;   /* darker emerald so it reads on white */
-  --accent-2:    #03663a;
-  --accent-fill: #00d67a;
-  --on-accent:   #002b14;
-  --accent-wash: rgba(4, 122, 68, 0.06);
-  --accent-edge: rgba(4, 122, 68, 0.28);
-  --glow:        0 0 18px rgba(0, 214, 122, 0.28);
-  --hero-glow:   rgba(0, 214, 122, 0.12);
-
-  color-scheme: light;
 }
 
 
@@ -289,11 +262,6 @@ ul, ol, dl, dd { margin: 0; padding: 0; list-style: none; }
   stroke-linejoin: round;
 }
 
-/* Show the sun in dark mode (click → light), the moon in light mode. */
-.i-sun  { display: block; }
-.i-moon { display: none; }
-:root[data-theme="light"] .i-sun  { display: none; }
-:root[data-theme="light"] .i-moon { display: block; }
 
 .btn-mini {
   display: inline-flex;
@@ -480,7 +448,7 @@ h1 {
 
 
 /* ---------- 6. Terminal card ----------
-   Stays dark in both themes: terminals are dark. */
+   Terminals are dark. */
 
 .terminal {
   background: #111215;
@@ -968,7 +936,6 @@ h1 {
   pointer-events: none;
   opacity: 0.6;
 }
-:root[data-theme="light"] .cat-layer { opacity: 0.55; }
 
 /* The cat's room (room.svg): its own band between the hero and About. */
 .room-band {

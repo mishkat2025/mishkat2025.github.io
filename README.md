@@ -9,7 +9,7 @@ one JavaScript file. Open `index.html` in a browser and it works.
 |---|---|
 | `index.html` | All the content. Every editable spot is marked `EDIT ME`. |
 | `styles.css` | All the styling. Colours are at the top in `:root`. |
-| `script.js` | Theme toggle, mobile menu, scroll animations, copy-email. |
+| `script.js` | Mobile menu, scroll animations, active nav link, copy-email. |
 | `cat.js` | The robot cat that lives behind the page, and its basket. Tuning knobs at the top. |
 | `room.svg` | The animated cat's room under the hero. Built by `assets/make_svgs.py` in the [profile repo](https://github.com/mishkat2025/mishkat2025); copy it over when it changes. |
 | `room-still.svg` | The same room without animation, shown to people who turn motion off. |
@@ -22,8 +22,8 @@ Search `index.html` for `EDIT ME` — that marks everything you need to change:
 name, bio, projects, skills, timeline, email, and social links.
 
 To change the colours, edit the `:root` block at the top of `styles.css`.
-There are two of them — one for light mode, one for dark. `--accent` is the
-one that changes the site's character most.
+The site is dark only. `--accent` is the colour that changes the site's
+character most.
 
 Drop your CV in next to `index.html` as `resume.pdf` and the Résumé button works.
 

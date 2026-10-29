@@ -30,22 +30,11 @@
 
   <link rel="stylesheet" href="styles.css">
 
-  <!-- Runs before the page paints. Two jobs:
-     1. Mark that JS is alive, so the fade-in animations are allowed to
-        start hidden. Without this, a visitor with JS off would see a
-        blank page.
-     2. Apply the saved colour theme immediately, so there is no flash
-        of the wrong theme. The site is dark unless someone picks light. -->
+  <!-- Runs before the page paints: marks that JS is alive, so the fade-in
+       animations are allowed to start hidden. Without this, a visitor with
+       JS off would see a blank page. -->
   <script>
-    (function () {
-      document.documentElement.classList.add("js");
-      try {
-        var saved = localStorage.getItem("theme");
-        if (saved === "dark" || saved === "light") {
-          document.documentElement.setAttribute("data-theme", saved);
-        }
-      } catch (e) { /* private mode: stay on the default dark theme */ }
-    })();
+    document.documentElement.classList.add("js");
   </script>
 </head>
 
@@ -78,16 +67,6 @@
       </nav>
 
       <div class="header-actions">
-        <button class="icon-btn" id="themeToggle" type="button" aria-label="Switch colour theme">
-          <svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true">
-            <circle cx="12" cy="12" r="4.2" />
-            <path
-              d="M12 2.5v2.4M12 19.1v2.4M21.5 12h-2.4M4.9 12H2.5M18.7 5.3l-1.7 1.7M7 17l-1.7 1.7M18.7 18.7 17 17M7 7 5.3 5.3" />
-          </svg>
-          <svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M20 14.2A8.2 8.2 0 0 1 9.8 4a8.4 8.4 0 1 0 10.2 10.2z" />
-          </svg>
-        </button>
         <a class="btn-mini" href="resume.pdf">Résumé</a>
         <button class="icon-btn menu-btn" id="menuBtn" type="button" aria-label="Open menu" aria-expanded="false"
           aria-controls="nav">

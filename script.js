@@ -1,48 +1,14 @@
 /* ============================================================
-   Portfolio behaviour. Five small, independent pieces:
-     1. theme toggle      2. mobile menu
-     3. scroll reveal     4. active nav link
-     5. copy-email + footer year
+   Portfolio behaviour. Four small, independent pieces:
+     1. mobile menu       2. scroll reveal
+     3. active nav link   4. copy-email + footer year
    Nothing here depends on a library.
    ============================================================ */
 
 (function () {
   "use strict";
 
-  /* ---------- 1. Theme toggle ----------
-     The <head> script already applied the saved theme before first paint,
-     so there is no flash. This only handles clicks.
-     localStorage can throw (private mode, blocked cookies), so every
-     access is wrapped. */
-
-  var STORAGE_KEY = "theme";
-
-  function storedTheme() {
-    try { return localStorage.getItem(STORAGE_KEY); } catch (e) { return null; }
-  }
-
-  function storeTheme(value) {
-    try { localStorage.setItem(STORAGE_KEY, value); } catch (e) { /* not fatal */ }
-  }
-
-
-  var toggle = document.getElementById("themeToggle");
-
-  if (toggle) {
-    toggle.addEventListener("click", function () {
-      var current = document.documentElement.getAttribute("data-theme");
-
-      // No explicit choice yet means we are on the default dark theme.
-      if (!current) current = "dark";
-
-      var next = current === "dark" ? "light" : "dark";
-      document.documentElement.setAttribute("data-theme", next);
-      storeTheme(next);
-    });
-  }
-
-
-  /* ---------- 2. Mobile menu ---------- */
+  /* ---------- 1. Mobile menu ---------- */
 
   var menuBtn = document.getElementById("menuBtn");
   var nav = document.getElementById("nav");
@@ -119,7 +85,7 @@
   }
 
 
-  /* ---------- 3. Scroll reveal ----------
+  /* ---------- 2. Scroll reveal ----------
      Elements with .reveal fade up once as they enter the viewport.
      IntersectionObserver is supported everywhere current; if it is
      missing we just show everything immediately. */
@@ -147,7 +113,7 @@
   }
 
 
-  /* ---------- 4. Active nav link + header border ---------- */
+  /* ---------- 3. Active nav link + header border ---------- */
 
   var header = document.getElementById("siteHeader");
   var sections = document.querySelectorAll("main section[id]");
@@ -179,7 +145,7 @@
   }
 
 
-  /* ---------- 5. Copy email + footer year ---------- */
+  /* ---------- 4. Copy email + footer year ---------- */
 
   var copyBtn = document.getElementById("copyEmail");
 
