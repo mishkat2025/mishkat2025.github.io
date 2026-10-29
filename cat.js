@@ -6,10 +6,13 @@
    off, so it never covers content and never blocks a click.
 
    What it does:
-     - lives by its charging pod in the empty space under the
-       terminal card (its "home"), sits, blinks, grooms itself
-     - stays inside the hero section (its "area") and never
-       wanders into the rest of the page
+     - lives in a room drawn faintly behind the hero: a night
+       window behind the terminal card, wallpaper, a wooden floor,
+       a rug and a plant (see paintRoom())
+     - has its charging pod in the space under the terminal card
+       (its "home"), sits, blinks, grooms itself
+     - walks on the room's floor, stays inside the hero section
+       (its "area") and never wanders into the rest of the page
      - now and then strolls around the visible part of the hero,
        then walks back home
      - walks BEHIND text, but treats solid blocks (cards, buttons,
@@ -111,6 +114,7 @@
     var cs = getComputedStyle(document.documentElement);
     colors.accent = cs.getPropertyValue("--accent").trim() || colors.accent;
     colors.bg = cs.getPropertyValue("--bg").trim() || colors.bg;
+    roomKey = "";                               // repaint the room in the new theme
   }
 
   readColors();
@@ -197,10 +201,13 @@
     }
   }
 
-  // Bounds for the cat's ground point, inside the area.
-  function minX() { return area.left + 50 * S; }
+  // Where the room's floor is (page coordinates). The cat walks on it.
+  var floorTop = 0, floorLeft = 0;
+
+  // Bounds for the cat's ground point: on the floor, inside the area.
+  function minX() { return Math.max(area.left + 50 * S, floorLeft + 20); }
   function maxX() { return area.right - 50 * S; }
-  function minY() { return area.top + HEADER + 80 * S; }
+  function minY() { return Math.max(area.top + HEADER + 80 * S, floorTop + 4); }
   function maxY() { return area.bottom - 8; }
 
   function inArea(x, y) {
@@ -1356,6 +1363,8 @@
     ctx.clearRect(0, 0, W, H);
     ctx.translate(-sx, -sy);                    // draw in page coordinates
 
+    if (roomBox.w) ctx.drawImage(roomCanvas, roomBox.x, roomBox.y, roomBox.w, roomBox.h);
+
     var catOnScreen = cat.y - sy > -20 && cat.y - sy < H + 100 * S;
     var bedOnScreen = dock.y - sy > -20 && dock.y - sy < H + 95 * S;
     var charging = cat.state === "sleep";
@@ -1377,12 +1386,242 @@
   }
 
 
+  /* ---------- The room behind the hero ----------
+     Painted once into its own canvas whenever the layout or the theme
+     changes, then copied under the cat every frame. Drawn in the same
+     neon line style as the cat, and kept faint so the text stays easy
+     to read (the whole layer is also at reduced opacity in styles.css). */
+
+  var roomCanvas = document.createElement("canvas");
+  var roomBox = { x: 0, y: 0, w: 0, h: 0 };
+  var roomKey = "";
+
+  function pageRect(el) {
+    var r = el.getBoundingClientRect();
+    return { left: r.left + window.scrollX, right: r.right + window.scrollX,
+             top: r.top + window.scrollY, bottom: r.bottom + window.scrollY };
+  }
+
+  function paintRoom() {
+    var term = document.querySelector(".terminal");
+    var t = term ? pageRect(term) : null;
+    var nums = [area.left, area.top, area.right, area.bottom, floorTop, floorLeft, dock.x, dock.y, dpr];
+    if (t) nums.push(t.left, t.top, t.right, t.bottom);
+    var key = nums.map(Math.round).join(",") + colors.accent + colors.bg;
+    if (key === roomKey) return;
+    roomKey = key;
+
+    var w = Math.max(1, Math.round(area.right - area.left));
+    var h = Math.max(1, Math.round(area.bottom - area.top));
+    roomBox = { x: area.left, y: area.top, w: w, h: h };
+    roomCanvas.width = Math.round(w * dpr);
+    roomCanvas.height = Math.round(h * dpr);
+    var g = roomCanvas.getContext("2d");
+    g.setTransform(dpr, 0, 0, dpr, -area.left * dpr, -area.top * dpr);   // page coordinates
+    g.clearRect(area.left, area.top, w, h);
+    g.lineCap = "round";
+    g.lineJoin = "round";
+    g.strokeStyle = colors.accent;
+    g.fillStyle = colors.accent;
+
+    function seg(x0, y0, x1, y1) {
+      g.beginPath();
+      g.moveTo(x0, y0);
+      g.lineTo(x1, y1);
+      g.stroke();
+    }
+    // Faint fill, then a brighter outline, for the current path.
+    function shape(fillAlpha, strokeAlpha, lineWidth) {
+      g.globalAlpha = fillAlpha;
+      g.fill();
+      g.globalAlpha = strokeAlpha;
+      g.lineWidth = lineWidth;
+      g.stroke();
+    }
+
+    var fy = floorTop, bottom = area.bottom, wallTop = area.top + HEADER;
+    var x, y, i;
+
+    // Wallpaper.
+    g.globalAlpha = 0.06;
+    g.lineWidth = 1;
+    for (x = area.left + 14; x < area.right; x += 28) seg(x, wallTop, x, fy);
+
+    // A window behind the terminal card: night sky, moon, stars, curtains.
+    if (t) {
+      var wx0 = Math.max(area.left + 12, t.left - 46);
+      var wx1 = Math.min(area.right - 12, t.right + 40);
+      var wy0 = Math.max(wallTop + 16, t.top - 56);
+      // One-column layouts stack the intro above the card: start the
+      // window (and its curtain rod) below the intro's links.
+      var copy = document.querySelector(".hero-copy");
+      if (copy) {
+        var c = pageRect(copy);
+        if (c.bottom < t.top) wy0 = Math.max(wy0, c.bottom + 30);
+      }
+      var wy1 = Math.min(fy - 30, t.bottom + 28);
+      if (wy1 - wy0 > 60) {
+        g.globalAlpha = 0.05;
+        g.fillRect(wx0, wy0, wx1 - wx0, wy1 - wy0);
+
+        // Stars, only where the card doesn't cover them. A fixed seed
+        // keeps them in the same places every time.
+        var seed = 7;
+        var rnd = function () { seed = (seed * 16807) % 2147483647; return seed / 2147483647; };
+        g.globalAlpha = 0.5;
+        for (i = 0; i < 46; i++) {
+          var px = wx0 + 8 + rnd() * (wx1 - wx0 - 16);
+          var py = wy0 + 8 + rnd() * (wy1 - wy0 - 16);
+          var pr = 0.6 + rnd() * 0.9;
+          if (px > t.left - 6 && px < t.right + 6 && py > t.top - 6 && py < t.bottom + 6) continue;
+          g.beginPath();
+          g.arc(px, py, pr, 0, Math.PI * 2);
+          g.fill();
+        }
+
+        // Crescent moon in the top-right corner, just clear of the card.
+        var mx = Math.min(wx1 - 24, t.right + 10), my = wy0 + 25;
+        g.globalAlpha = 0.6;
+        g.beginPath();
+        g.arc(mx, my, 14, 0, Math.PI * 2);
+        g.fill();
+        g.save();
+        g.globalCompositeOperation = "destination-out";
+        g.globalAlpha = 1;
+        g.beginPath();
+        g.arc(mx + 7, my - 5, 12.5, 0, Math.PI * 2);
+        g.fill();
+        g.restore();
+
+        // Frame, cross bars and sill.
+        g.globalAlpha = 0.4;
+        g.lineWidth = 3;
+        g.strokeRect(wx0, wy0, wx1 - wx0, wy1 - wy0);
+        g.globalAlpha = 0.28;
+        g.lineWidth = 2;
+        seg((wx0 + wx1) / 2, wy0, (wx0 + wx1) / 2, wy1);
+        seg(wx0, (wy0 + wy1) / 2, wx1, (wy0 + wy1) / 2);
+        g.globalAlpha = 0.45;
+        g.lineWidth = 4;
+        seg(wx0 - 12, wy1 + 3, wx1 + 12, wy1 + 3);
+
+        // Curtain rod and two curtains with folds.
+        g.globalAlpha = 0.4;
+        g.lineWidth = 2;
+        seg(wx0 - 30, wy0 - 12, wx1 + 30, wy0 - 12);
+        [-1, 1].forEach(function (s) {
+          var xin = s < 0 ? wx0 + 16 : wx1 - 16;
+          var xout = s < 0 ? wx0 - 24 : wx1 + 24;
+          var midY = (wy0 + wy1) / 2;
+          g.beginPath();
+          g.moveTo(xout, wy0 - 12);
+          g.lineTo(xin, wy0 - 12);
+          g.quadraticCurveTo(xin - s * 6, midY, xin + s * 10, wy1 + 22);
+          g.lineTo(xout, wy1 + 22);
+          g.closePath();
+          shape(0.05, 0.35, 1.6);
+          g.globalAlpha = 0.2;
+          g.lineWidth = 1;
+          for (var k = 1; k < 3; k++) {
+            var fx = xout + (xin - xout) * k / 3;
+            g.beginPath();
+            g.moveTo(fx, wy0 - 10);
+            g.quadraticCurveTo(fx - s * 3, midY, fx + s * 4, wy1 + 20);
+            g.stroke();
+          }
+        });
+      }
+    }
+
+    // Floor: boards below a skirting line.
+    g.globalAlpha = 0.05;
+    g.fillRect(area.left, fy, w, bottom - fy);
+    g.globalAlpha = 0.4;
+    g.lineWidth = 2;
+    seg(area.left, fy, area.right, fy);
+    g.globalAlpha = 0.14;
+    g.lineWidth = 1;
+    seg(area.left, fy + 7, area.right, fy + 7);
+    var row = 0;
+    for (y = fy + 7; y < bottom - 6; y += 24, row++) {
+      var y2 = Math.min(y + 24, bottom);
+      if (y2 < bottom - 4) seg(area.left, y2, area.right, y2);
+      for (x = area.left + 30 + (row % 3) * 70; x < area.right; x += 210) seg(x, y + 1, x, y2 - 1);
+    }
+
+    // A rug in front of the pod.
+    var depth = bottom - fy;
+    var rcx = t ? (t.left + t.right) / 2 : dock.x - 60;
+    var rcy = fy + depth * 0.62;
+    var rx = Math.min(w * 0.42, t ? (t.right - t.left) * 0.62 : 240);
+    var ry = Math.max(8, Math.min(20, depth * 0.16));
+    g.beginPath();
+    g.ellipse(rcx, rcy, rx, ry, 0, 0, Math.PI * 2);
+    shape(0.05, 0.35, 2);
+    g.setLineDash([4, 6]);
+    g.beginPath();
+    g.ellipse(rcx, rcy, Math.max(4, rx - 14), Math.max(3, ry - 5), 0, 0, Math.PI * 2);
+    shape(0, 0.22, 1);
+    g.setLineDash([]);
+
+    // A potted plant at the far end of the cat's corner.
+    var px0 = t ? Math.max(area.left + 30, t.left + 22) : area.left + 40;
+    var py0 = fy + 12, potTop = py0 - 22;
+    g.beginPath();
+    g.moveTo(px0 - 12, py0);
+    g.lineTo(px0 - 15, potTop);
+    g.lineTo(px0 + 15, potTop);
+    g.lineTo(px0 + 12, py0);
+    g.closePath();
+    shape(0.06, 0.4, 1.6);
+    [[-60, 30], [-30, 36], [0, 34], [30, 36], [60, 30], [-85, 24], [85, 24]].forEach(function (leaf) {
+      var a = (leaf[0] - 90) * Math.PI / 180;
+      var ex = px0 + Math.cos(a) * leaf[1], ey = potTop + Math.sin(a) * leaf[1];
+      g.beginPath();
+      g.moveTo(px0, potTop);
+      g.quadraticCurveTo(ex - 9, ey + 7, ex, ey);
+      g.quadraticCurveTo(ex + 8, ey + 12, px0, potTop);
+      shape(0.06, 0.35, 1.2);
+    });
+
+    // With the copy beside the card, fade the floor out before it reaches
+    // the text: the cat's floor ends there too (see floorLeft).
+    if (floorLeft > area.left) {
+      g.save();
+      g.globalCompositeOperation = "destination-out";
+      g.globalAlpha = 1;
+      var fade = g.createLinearGradient(floorLeft - 60, 0, floorLeft + 90, 0);
+      fade.addColorStop(0, "rgba(0,0,0,1)");
+      fade.addColorStop(1, "rgba(0,0,0,0)");
+      g.fillStyle = fade;
+      g.fillRect(area.left, fy - 2, floorLeft + 90 - area.left, bottom - fy + 2);
+      g.restore();
+    }
+  }
+
+
   /* ---------- Measuring the page ---------- */
 
   function measure() {
     computeArea();
+    floorTop = area.top;                        // first find a home anywhere in the hero
+    floorLeft = area.left;
     buildGrid();
     computeHome();                              // needs the grid to check the pod fits
+
+    // The floor starts just behind the pod. With the copy beside the
+    // terminal card (two columns), it ends a little left of the card so
+    // the cat stays clear of the text.
+    floorTop = Math.max(area.top, dock.y - 26);
+    var t = document.querySelector(".terminal");
+    if (t) {
+      var r = pageRect(t);
+      if (r.left > area.left + (area.right - area.left) * 0.4 && r.top < floorTop - 150) {
+        floorLeft = Math.max(area.left, r.left - 150);
+      }
+    }
+    buildGrid();                                // now keep the cat on the floor
+    paintRoom();
   }
 
   function resize() {
@@ -1419,6 +1658,8 @@
     if (now - lastMeasure > 2000) {
       measure();
       lastMeasure = now;
+    } else if (!roomKey) {
+      paintRoom();                              // the theme just changed
     }
 
     // Nothing to see while the hero is scrolled away: rest until it is back.
