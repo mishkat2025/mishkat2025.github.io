@@ -937,27 +937,6 @@ h1 {
   opacity: 0.6;
 }
 
-/* The cat's room (room.svg): its own band between the hero and About. */
-.room-band {
-  padding-block: var(--section-y);
-  border-bottom: 1px solid var(--line-soft);
-}
-.room { margin: 0; }
-.room img {
-  display: block;
-  width: 100%;
-  height: auto;
-  border-radius: 12px;
-  box-shadow: 0 24px 60px -24px rgba(0, 0, 0, 0.6);
-}
-.room figcaption {
-  margin-top: 14px;
-  font-family: var(--mono);
-  font-size: 12px;
-  color: var(--muted);
-  text-align: center;
-}
-
 /* One-column layouts leave no space under the terminal card, so give
    the cat a yard there for its pod. cat.js sets .has-cat on <html>. */
 @media screen and (max-width: 1024px) {
