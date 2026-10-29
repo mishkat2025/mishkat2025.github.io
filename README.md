@@ -11,6 +11,8 @@ one JavaScript file. Open `index.html` in a browser and it works.
 | `styles.css` | All the styling. Colours are at the top in `:root`. |
 | `script.js` | Theme toggle, mobile menu, scroll animations, copy-email. |
 | `cat.js` | The robot cat that lives behind the page, and its basket. Tuning knobs at the top. |
+| `room.svg` | The animated cat's room under the hero. Built by `assets/make_svgs.py` in the [profile repo](https://github.com/mishkat2025/mishkat2025); copy it over when it changes. |
+| `room-still.svg` | The same room without animation, shown to people who turn motion off. |
 | `404.html` | Shown when someone hits a bad URL. |
 | `.nojekyll` | Tells GitHub Pages to serve files as-is. |
 
